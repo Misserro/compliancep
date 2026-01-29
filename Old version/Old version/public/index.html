@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Document Analyzer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <main class="container">
+    <header class="header">
+      <h1>Document Analyzer</h1>
+      <p class="subtle">Upload a document, choose outputs, and optionally add cross-reference documents.</p>
+    </header>
+
+    <section class="card">
+      <form id="analyzeForm">
+        <div class="field">
+          <label for="fileInput">Main document (PDF or DOCX)</label>
+          <input id="fileInput" type="file"
+            accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            required />
+          <p class="hint">Tip: Start with short docs to reduce token usage.</p>
+        </div>
+
+        <div class="field">
+          <label>Outputs (choose at least 1)</label>
+          <div class="checks" id="outputs">
+            <label class="check">
+              <input type="checkbox" name="outputs" value="translation" checked />
+              <span>Full translation</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" name="outputs" value="summary" checked />
+              <span>Summary</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" name="outputs" value="key_points" />
+              <span>Key points</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" name="outputs" value="todos" />
+              <span>Department to-do list</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" name="outputs" value="cross_reference" />
+              <span>Cross-reference</span>
+            </label>
+            <label class="check">
+              <input type="checkbox" name="outputs" value="generate_template" />
+              <span>Generate response template</span>
+            </label>
+          </div>
+          <p class="hint">
+            Cross-reference searches for answers in the additional documents and reports findings.
+            These documents are also used to help fill the response template when requested.
+          </p>
+        </div>
+
+        <div class="field">
+          <label for="translateTo">Translate to</label>
+          <select id="translateTo" required>
+            <option value="English">English</option>
+            <option value="Polish">Polish</option>
+            <option value="German">German</option>
+            <option value="French">French</option>
+            <option value="Spanish">Spanish</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="crossFiles">Cross-reference documents (optional, multiple)</label>
+          <input id="crossFiles" type="file" multiple
+            accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+          <p class="hint">These documents are only used when "Cross-reference" or "Generate response template" is selected.</p>
+        </div>
+
+        <div class="actions">
+          <button id="analyzeBtn" type="submit" disabled>Analyze</button>
+          <button id="clearBtn" type="button">Clear</button>
+        </div>
+
+        <div id="status" class="status">Choose at least one output to enable Analyze.</div>
+      </form>
+    </section>
+
+    <section class="card">
+      <div class="result-block">
+        <details class="disclosure" id="translatedDisclosure" open>
+          <summary>
+            <span>Translated document</span>
+            <span class="subtle">Click to expand/collapse</span>
+          </summary>
+          <div style="margin-top:10px;">
+            <div class="result-actions">
+              <button id="exportTranslationBtn" type="button" class="btn-export">Export</button>
+            </div>
+            <div id="translatedDoc" class="result-box subtle" style="margin-top:10px;">No data yet.</div>
+          </div>
+        </details>
+      </div>
+
+      <div class="result-block">
+        <h3>Summary</h3>
+        <div id="summary" class="result-box subtle">No data yet.</div>
+      </div>
+
+      <div class="result-block">
+        <h3>Key points</h3>
+        <div id="keyPoints" class="result-box subtle">No data yet.</div>
+      </div>
+
+      <div class="result-block">
+        <h3>To-dos by department</h3>
+        <div class="result-actions">
+          <button id="exportTodosBtn" type="button" class="btn-export">Export</button>
+        </div>
+        <div id="todos" class="result-box subtle" style="margin-top:10px;">No data yet.</div>
+      </div>
+
+      <div class="result-block">
+        <h3>Cross-reference</h3>
+        <div id="crossRef" class="result-box subtle">No data yet.</div>
+      </div>
+
+      <div class="result-block">
+        <h3>Response template</h3>
+
+        <div class="result-actions stack">
+          <button id="exportTemplateBtn" type="button" class="btn-export">Export</button>
+
+          <label class="check" style="padding:0;border:0;background:transparent;">
+            <input type="checkbox" id="templateFillToggle" />
+            <span class="subtle">Pre-fill from cross-reference document data</span>
+          </label>
+        </div>
+
+        <div id="templateBox" class="result-box subtle" style="margin-top:10px;">No data yet.</div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
